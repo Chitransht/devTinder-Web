@@ -6,8 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constant";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("tusharchitransh@gmail.com");
+  const [password, setPassword] = useState("Tushar@123");
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -18,10 +19,10 @@ const Login = () => {
         { emailId: email, password: password },
         { withCredentials: true },
       );
-
-      dispatch(addUser(res.data.data));
+      dispatch(addUser(res.data));
       return navigate("/");
     } catch (error) {
+      setError(error.response?.data?.message || "An error occurred during login.");
       console.error("Error logging in:", error);
     }
   };
@@ -53,6 +54,7 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </label>
+          {error && <p className="text-red-600">Error: {error}</p>}
           <div className="card-actions justify-center">
             <button className="btn btn-primary" onClick={handleLogin}>
               Login
